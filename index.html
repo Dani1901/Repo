@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>Frases</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript" src="js/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript" src="js/jquery.mobile-1.4.5.js"></script>
+    <script src="phonegap.js"></script>
+   
+    </script>
+
+   <link rel="stylesheet"  href="css/jquery.mobile-1.4.5.css">
+     <link rel="stylesheet"  href="css/jquery.mobile.theme-1.4.5.css">
+   <link rel="stylesheet"  href="css/temafsc_3.css">
+   <link rel="stylesheet"  href="css/jquery.mobile.external-png-1.4.5.css">
+   <link rel="stylesheet"  href="css/jquery.mobile.icons-1.4.5.css">
+   <link rel="stylesheet"  href="css/jquery.mobile.inline-png-1.4.5.css">
+ 
+   <link rel="stylesheet"  href="css/jquery.mobile.structure-1.4.5.css">
+ 
+<!--
+   <script type="text/javascript" src="js/jquery-ui.js">
+   <link rel="stylesheet"  href="css/jquery-ui.css">
+   <link rel="stylesheet"  href="css/jquery-ui.structure.css">
+-->
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+var bd= openDatabase('BDfrases','1.0','base datos frases',2*1024);
+document.addEventListener("ondeviceready",onDeviceReady,false);
+if(bd!=null){
+    console.log("bd creada");
+    bd.transaction(crearTabla,errorbd);
+  }
+  else{
+   console.log("bd NO creada");
+  }
+function onDeviceReady(){
+  if(bd!=null){
+    console.log("bd creada");
+    bd.transaction(crearTabla,errorbd);
+  }
+  else{
+   console.log("bd NO creada");
+  }
+}
+
+function crearTabla(tx){
+  tx.executeSql('CREATE TABLE IF NOT EXISTS frases(id INTEGER PRIMARY KEY AUTOINCREMENT, autor TEXT NOT NULL, descripcion TEXT NOT NULL, origen TEXT)');
+}
+function errorbd(err){
+  console.log("error al ejecutar sentencia"+err.message);
+}
+
+function llamarsentencia(numero){
+  switch(numero){
+    case 1:
+          bd.transaction(guardarFrase,errorbd);
+          break;
+    case 2:
+          bd.transaction(listarTodas,errorbd);
+          break;
+    case 3:
+          bd.transaction(buscxAutor,errorbd);
+          break;
+    case 4:
+          bd.transaction(buscxDescripcion,errorbd);
+          break;
+    case 5:
+          bd.transaction(buscxOrigen,errorbd);
+
+
+  }
+}
+
+function guardarFrase(tx){
+  var fra= $('#txtfrase').val();
+  var aut= $('#txtautor').val();
+  var orig= $('#origenfrase option:selected').text();
+  tx.executeSql('INSERT INTO frases(autor, descripcion, origen) values (?,?,?)',[aut,fra,orig]);
+  alert("frase guardada");
+}
+
+function listarTodas(tx){
+  tx.executeSql('SELECT autor,descripcion,origen from frases',[], function(tx,resultado){
+    var len= resultado.rows.length;
+    $('#listadefrases').listview();
+    for(var i=0; i<len; i++){
+      var fila=resultado.rows.item(i);
+      $('#listadefrases').append('<li><a><label>'+fila['descripcion']+'</label><br><p>'+fila['autor']+'</p></a></li>');
+    }
+     $('#listadefrases').listview('refresh');
+
+  });
+}
+
+function buscxAutor(tx){
+    var autor_a_buscar=$('#txtautor_b').val();
+     tx.executeSql('SELECT autor,descripcion,origen from frases where autor like "'+autor_a_buscar+'%"',[], function(tx,resultado){
+    var len= resultado.rows.length;
+    if(len>0){
+      $('#lista_x_autor').empty();
+         $('#lista_x_autor').listview();
+    for(var i=0; i<len; i++){
+      var fila=resultado.rows.item(i);
+      $('#lista_x_autor').append('<li><a><label>'+fila['descripcion']+'</label><br><p>'+fila['origen']+'</p></a></li>');
+    }
+     $('#lista_x_autor').listview('refresh');
+    }
+    else{
+      alert("No hay frases guardadas de ese autor");
+    }
+ 
+
+  });
+
+}
+
+function buscxDescripcion(tx){
+    var frase_a_buscar=$('#txtfrase_b').val();
+     tx.executeSql('SELECT autor,descripcion,origen from frases where descripcion like "'+frase_a_buscar+'%"',[], function(tx,resultado){
+    var len= resultado.rows.length;
+    if(len>0){
+      $('#lista_x_frase').empty();
+         $('#lista_x_frase').listview();
+    for(var i=0; i<len; i++){
+      var fila=resultado.rows.item(i);
+      $('#lista_x_frase').append('<li><a><label>'+fila['descripcion']+'</label><p>'+fila['autor']+'</p></a></li>');
+    }
+     $('#lista_x_frase').listview('refresh');
+    }
+    else{
+      alert("No hay frases que contenga(n) esa(s) palabra(s)");
+    }
+ 
+
+  });
+
+}
+
+function buscxOrigen(tx){
+    var tipo_origen=$('#origenfrase_b option:selected').text();
+     tx.executeSql('SELECT autor,descripcion,origen from frases where origen =?',[tipo_origen], function(tx,resultado){
+    var len= resultado.rows.length;
+    if(len>0){
+      $('#lista_x_serie_libro').empty();
+         $('#lista_x_serie_libro').listview();
+    for(var i=0; i<len; i++){
+      var fila=resultado.rows.item(i);
+      $('#lista_x_serie_libro').append('<li><a><label>'+fila['descripcion']+'</label><p>'+fila['autor']+'</p></a></li>');
+    }
+     $('#lista_x_serie_libro').listview('refresh');
+    }
+    else{
+      alert("No hay frases");
+    }
+ 
+
+  });
+
+}
+
+
+$(document).ready(function(){
+  $('#bt_guardar').click(function(){
+    llamarsentencia(1);
+  });
+   $('#list_todo').click(function(){
+    llamarsentencia(2);
+  });
+     $('#buscar_x_autor').click(function(){
+    llamarsentencia(3);
+  });
+      $('#buscar_x_frase').click(function(){
+    llamarsentencia(4);
+  });
+  $('#buscar_x_origen').click(function(){
+    llamarsentencia(5);
+  });
+
+});
+
+</script>
+
+
+
+</head>
+<body>
+<div id="principal" data-role="page">
+	<div data-role="header" data-position="fixed" data-theme="c">
+		Frases de Personajes
+	</div>
+	<div data-role="content" id="" data-theme="c">
+    <br>
+   <ul data-role="listview">
+    <li data-role="list-divider">Opciones Básicas</li>
+     <li><a href="#pag2">Agregar</a></li>
+     <li><a href="">Eliminar Todo</a></li>
+     <li><a href="#listartodo">Listar Todo</a></li>
+   </ul>
+  <br>
+  <br>
+     <ul data-role="listview">
+    <li data-role="list-divider">Buscar</li>
+     <li><a href="#buscar">Por Autor</a></li>
+     <li><a href="#buscarxfrase">Por Descripción</a></li>
+     <li><a href="#buscarxserie_libro">Por Serie o Libro</a></li>
+   </ul>
+  
+   <!--
+      <div id="status"></div>
+ -->
+  </div>
+  <br>
+  <br>
+
+
+	<div data-role="footer" data-theme="c" data-position="fixed">
+    Developed by: FASD
+	</div>
+</div>
+<div id="pag2" data-role="page">
+<div data-role="header" data-position="fixed" data-theme="c">
+    Agregar Nueva Frase
+  </div>
+  <div data-role="content">
+    <div>
+    <input type="text" id="txtfrase" placeholder="Escriba la Frase">
+    <input type="text" id="txtautor" placeholder="Escriba el nombre del Autor">
+    </div>
+    <br>
+    <select name="origenfrase" id="origenfrase" data-native-menu="false">
+      <option value="1">Libro</option>
+      <option value="2">Serie</option>
+    </select>
+    <br>
+    <button id="bt_guardar">Guardar</button>
+    <a href="#principal" data-role="button">Regresar</a>
+  </div>
+<div data-role="footer" data-theme="c" data-position="fixed">
+    Developed by: FASD
+  </div>
+</div>
+
+
+<div id="listartodo" data-role="page">
+<div data-role="header" data-position="fixed" data-theme="c">
+    Lista de Frases
+  </div>
+  <div data-role="content">
+  <ul id="listadefrases"
+  ></ul>
+  </div>
+<div data-role="footer" data-theme="c" data-position="fixed">
+ <div data-role="navbar">
+   <ul>
+     <li><a href="" data-icon="bullets" id="list_todo">Listar</a></li>
+     <li><a href="#principal" data-icon="home">Regresar</a></li>     
+   </ul>
+ </div>
+  </div>
+</div>
+
+<div id="buscar" data-role="page">
+<div data-role="header" data-position="fixed" data-theme="c">
+    Buscar por Autor
+  </div>
+  <div data-role="content">
+<input type="text" id="txtautor_b" placeholder="Escriba el nombre del Autor">
+<ul id="lista_x_autor"></ul>
+  </div>
+<div data-role="footer" data-theme="c" data-position="fixed">
+ <div data-role="navbar">
+   <ul>
+     <li><a href="" data-icon="search" id="buscar_x_autor">Buscar</a></li>
+     <li><a href="#principal" data-icon="home">Regresar</a></li>     
+   </ul>
+ </div>
+  </div>
+</div>
+
+<div id="buscarxfrase" data-role="page">
+<div data-role="header" data-position="fixed" data-theme="c">
+    Buscar por Frase
+  </div>
+  <div data-role="content">
+<input type="text" id="txtfrase_b" placeholder="Escriba una palabra que contiene la frase">
+<ul id="lista_x_frase"></ul>
+  </div>
+<div data-role="footer" data-theme="c" data-position="fixed">
+ <div data-role="navbar">
+   <ul>
+     <li><a href="" data-icon="search" id="buscar_x_frase">Buscar</a></li>
+     <li><a href="#principal" data-icon="home">Regresar</a></li>     
+   </ul>
+ </div>
+  </div>
+</div>
+
+<div id="buscarxserie_libro" data-role="page">
+<div data-role="header" data-position="fixed" data-theme="c">
+    Buscar por Serie o Libro
+  </div>
+  <div data-role="content">
+     <select name="origenfrase_b" id="origenfrase_b" data-native-menu="false">
+      <option value="1">Libro</option>
+      <option value="2">Serie</option>
+    </select>
+    <ul id="lista_x_serie_libro"></ul>
+    <!--
+    <input type="text" id="txtfrase_b" placeholder="Escriba el nombre de la serie o Libro">
+  -->
+
+  </div>
+<div data-role="footer" data-theme="c" data-position="fixed">
+ <div data-role="navbar">
+   <ul>
+     <li><a href="" data-icon="search" id="buscar_x_origen">Buscar</a></li>
+     <li><a href="#principal" data-icon="home">Regresar</a></li>     
+   </ul>
+ </div>
+  </div>
+</div>
+
+</body>
+</html>
