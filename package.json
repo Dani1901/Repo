@@ -1,0 +1,23 @@
+{
+  "name": "tareaarqui",
+  "version": "1.0.0",
+  "description": "Tarea de mensajes usando phonegap",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "mensajeria"
+  ],
+  "author": "Carlos",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.5.2",
+    "gulp-webserver": "^0.9.1",
+    "mysql": "^2.10.2"
+  },
+  "dependencies": {
+    "nano": "^6.2.0"
+  }
+}

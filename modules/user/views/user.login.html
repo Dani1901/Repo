@@ -1,0 +1,23 @@
+<div class="container" ng-init="getLogin()">
+  <div class="row">
+    <div class="input-field col s6">
+      <input value="" id="user" type="text" class="validate" ng-model="loginData.username">
+      <label class="active" for="user">Nombre de usuario</label>
+    </div>
+  </div>
+    
+  <div class="row">
+    <div class="input-field col s6">
+      <input value="" id="pass" type="password" class="validate" ng-model="loginData.password">
+      <label class="active" for="pass">Contraseña</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s6 offset-s2">
+      <button class="btn waves-effect waves-light #ab47bc purple lighten-1" type="submit" id="btnIngresar" name="action" ng-click="login()">Ingresar
+         <i class="material-icons left">comment</i>
+      </button>
+    </div>
+  </div>
+</div>

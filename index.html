@@ -1,46 +1,54 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection"
-              content="telephone=no" />
-        <meta name="msapplication-tap-highlight"
-              content="no" />
-        <meta name="viewport"
-              content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-         <title>Chat PhoneGap</title>
-        <!-- Required libraries for the chat -->
-    	<script src="https://cdn.pubnub.com/pubnub.min.js"></script>
-        <script src="https://cdn.pubnub.com/pubnub-crypto.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.8/angular.min.js"></script>
-        <script src="http://pubnub.github.io/pubnub-angular/lib/pubnub-angular.js"></script>
-        <link href='http://fonts.googleapis.com/css?family=Gorditas:700' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="css/style.css">
-    </head> 
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight"content="no" />
+
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+    <title>Pura Vida Message</title> 
+</head>
+<body ng-app="chat">
+    <nav>
+      <div class="nav-wrapper purple">
+        <a href="#!" class="brand-logo">PuraVidaMessage</a>
+        <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          <li><a ui-sref="user.login">Cerrar sesión</a></li>
+
+        </ul>
+        <ul class="side-nav" id="mobile-demo">
+          <li><a ui-sref="user.login">Cerrar sesión</a></li>
+          
+        </ul>
+      </div>
+    </nav>
+
+    <ui-view></ui-view>
+
+    <script type="text/javascript" src="js/lib/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="js/lib/materialize.min.js"></script>
+    <script type="text/javascript" src="node_modules/angular/angular.js"></script>
+    <script type="text/javascript" src="js/lib/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="js/connect.js"></script>
+    <script type="text/javascript" src="js/lib/pubnub-angular.js"></script>
+    <script src="https://cdn.pubnub.com/pubnub.min.js"></script>
 
 
-    <body>
-	<header>
-		<h1>Chat Phone</h1>
-	</header>
+    <!-- APP SCRIPTS -->
+    <script src="js/app.js"></script>
+    
+    <!-- USER SCRIPTS -->
+    <script src="modules/user/user.routes.js"></script>
+    <script src="modules/user/controllers/user.js"></script>
+    
+    <!-- CHAT SCRIPTS -->
+    <script src="modules/chat/chat.routes.js"></script>
+    <script src="modules/chat/controllers/chat.js"></script>
 
-	<section id="main" role="main">
-		<div id="chat">
-			<input type="text" id="input" placeholder="Escriba el mensaje...">
-		</div>
-		<button id="button">Enviar mensaje</button>
- 		
-		<p id="presence"></p>
-		<div id="output"></div>
-	</section>
-
-	<footer></footer>
-
-
-	<script src="js/App.js"></script> 
-	
 </body>
-
-
-
 </html>

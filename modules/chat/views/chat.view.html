@@ -1,0 +1,18 @@
+<div class="container">
+	<h1>Chat Phone</h1>
+	<section id="main" role="main">
+		<div class="well">
+            <dl>
+                <dt ng-repeat="message in messages track by $index"><div>{{message}}</div></dt>
+            </dl>
+        </div>
+		<form ng-submit="publish()">
+			<div id="chat">
+				<input type="text" id="input" placeholder="Escriba el mensaje..." ng-model="newMessage">
+			</div>
+			<button class="btn waves-effect waves-light #ab47bc purple lighten-1" type="submit" id="button" name="action">Enviar
+	         	<i class="material-icons left">comment</i>
+	      	</button>	
+		</form>
+	</section>
+</div>
